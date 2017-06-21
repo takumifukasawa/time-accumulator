@@ -1,14 +1,23 @@
 # time-accumulator
 
-## インストール
+## 使い方
 
-```
-$ yarn (or $ npm install)
+```javascript
+
+import TimeAccumulator from './TimeAccumulator';
+
+// pass func and fps
+const timeAccumulator = new TimeAccumulator(update, 5);
+requestAnimationFrame(tick);
+
+// 5fpsで実行される
+function update(time, delta) {
+  console.log(time, delta);
+}
+
+function tick(time) {
+  timeAccumulator.exec(time);
+  requestAnimationFrame(tick);
+}
 ```
 
-## 開発手順
-
-```
-// watchifyでのjavascriptビルドと簡易サーバー（browser-sync）を立ち上げる
-$ yarn start (or $ npm start)
-```
