@@ -245,7 +245,7 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //--------------------------------------------
-// 加算方式
+// 減算方式
 //--------------------------------------------
 
 var TimeAccumulator = function () {
@@ -255,25 +255,27 @@ var TimeAccumulator = function () {
 
     this._func = func;
     this._rate = 1000 / fps;
-    this._time = -Infinity;
+    this._prevTime = -Infinity;
+    this._lag = 0;
     this._chaseCount = chaseCount;
   }
 
   (0, _createClass3.default)(TimeAccumulator, [{
     key: "exec",
     value: function exec(time) {
-      if (this._time < 0) {
-        this._time = time;
+      if (this._prevTime < 0) {
+        this._prevTime = time;
       }
 
-      if (this._time >= time) {
-        return;
-      }
+      var currentTime = time;
+      var elapsedTime = currentTime - this._prevTime;
+      this._prevTime = time;
+      this._lag += elapsedTime;
 
       var count = 0;
-      while (count < this._chaseCount && this._time < time) {
-        this._time += this._rate;
-        this._func(this._time, this._rate);
+      while (count < this._chaseCount && this._lag > this._rate) {
+        this._lag -= this._rate;
+        this._func(this._prevTime += this._rate * count, this._rate);
         count++;
       }
     }
@@ -286,13 +288,15 @@ exports.default = TimeAccumulator;
 },{"babel-runtime/helpers/classCallCheck":2,"babel-runtime/helpers/createClass":3}],22:[function(require,module,exports){
 'use strict';
 
-var _TimeAccumulator = require('./TimeAccumulator');
+var _TimeAccumulatorLagged = require('./TimeAccumulatorLagged');
 
-var _TimeAccumulator2 = _interopRequireDefault(_TimeAccumulator);
+var _TimeAccumulatorLagged2 = _interopRequireDefault(_TimeAccumulatorLagged);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var timeAccumulator = new _TimeAccumulator2.default(update, 5);
+var timeAccumulator = new _TimeAccumulatorLagged2.default(update, 5);
+//import TimeAccumulator from './TimeAccumulator';
+
 
 requestAnimationFrame(tick);
 
@@ -305,4 +309,4 @@ function tick(time) {
   requestAnimationFrame(tick);
 }
 
-},{"./TimeAccumulator":21}]},{},[22]);
+},{"./TimeAccumulatorLagged":21}]},{},[22]);

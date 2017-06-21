@@ -1,5 +1,6 @@
 
-import TimeAccumulator from './TimeAccumulator';
+//import TimeAccumulator from './TimeAccumulator';
+import TimeAccumulator from './TimeAccumulatorLagged';
 
 const timeAccumulator = new TimeAccumulator(update, 5);
 
