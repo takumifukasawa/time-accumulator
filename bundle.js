@@ -245,6 +245,62 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //--------------------------------------------
+// 加算方式
+//--------------------------------------------
+
+var TimeAccumulator = function () {
+  function TimeAccumulator(func, fps) {
+    var chaseCount = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
+    (0, _classCallCheck3.default)(this, TimeAccumulator);
+
+    this._func = func;
+    this._rate = 1000 / fps;
+    this._time = -Infinity;
+    this._chaseCount = chaseCount;
+  }
+
+  (0, _createClass3.default)(TimeAccumulator, [{
+    key: "exec",
+    value: function exec(time) {
+      if (this._time < 0) {
+        this._time = time;
+      }
+
+      if (this._time >= time) {
+        return;
+      }
+
+      var count = 0;
+      while (count < this._chaseCount && this._time < time) {
+        this._time += this._rate;
+        this._func(this._time, this._rate);
+        count++;
+      }
+    }
+  }]);
+  return TimeAccumulator;
+}();
+
+exports.default = TimeAccumulator;
+
+},{"babel-runtime/helpers/classCallCheck":2,"babel-runtime/helpers/createClass":3}],22:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require("babel-runtime/helpers/createClass");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//--------------------------------------------
 // 減算方式
 //--------------------------------------------
 
@@ -285,8 +341,12 @@ var TimeAccumulator = function () {
 
 exports.default = TimeAccumulator;
 
-},{"babel-runtime/helpers/classCallCheck":2,"babel-runtime/helpers/createClass":3}],22:[function(require,module,exports){
+},{"babel-runtime/helpers/classCallCheck":2,"babel-runtime/helpers/createClass":3}],23:[function(require,module,exports){
 'use strict';
+
+var _TimeAccumulator = require('./TimeAccumulator');
+
+var _TimeAccumulator2 = _interopRequireDefault(_TimeAccumulator);
 
 var _TimeAccumulatorLagged = require('./TimeAccumulatorLagged');
 
@@ -294,9 +354,10 @@ var _TimeAccumulatorLagged2 = _interopRequireDefault(_TimeAccumulatorLagged);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var timeAccumulator = new _TimeAccumulatorLagged2.default(update, 5);
-//import TimeAccumulator from './TimeAccumulator';
+var timeAccumulator = new _TimeAccumulator2.default(update, 5);
 
+//elapsedをつかった減算方式
+//const timeAccumulator = new TimeAccumulator(update, 5);
 
 requestAnimationFrame(tick);
 
@@ -309,4 +370,4 @@ function tick(time) {
   requestAnimationFrame(tick);
 }
 
-},{"./TimeAccumulatorLagged":21}]},{},[22]);
+},{"./TimeAccumulator":21,"./TimeAccumulatorLagged":22}]},{},[23]);

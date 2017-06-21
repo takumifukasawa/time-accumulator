@@ -1,8 +1,11 @@
 
-//import TimeAccumulator from './TimeAccumulator';
-import TimeAccumulator from './TimeAccumulatorLagged';
+import TimeAccumulator from './TimeAccumulator';
+import TimeAccumulatorLagged from './TimeAccumulatorLagged';
 
 const timeAccumulator = new TimeAccumulator(update, 5);
+
+//elapsedをつかった減算方式
+//const timeAccumulator = new TimeAccumulator(update, 5);
 
 requestAnimationFrame(tick);
 
