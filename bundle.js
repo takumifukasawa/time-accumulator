@@ -325,13 +325,12 @@ var TimeAccumulator = function () {
 
       var currentTime = time;
       var elapsedTime = currentTime - this._prevTime;
-      this._prevTime = time;
       this._lag += elapsedTime;
 
       var count = 0;
       while (count < this._chaseCount && this._lag > this._rate) {
         this._lag -= this._rate;
-        this._func(this._prevTime += this._rate * count, this._rate);
+        this._func(this._prevTime += this._rate, this._rate);
         count++;
       }
     }
@@ -354,10 +353,10 @@ var _TimeAccumulatorLagged2 = _interopRequireDefault(_TimeAccumulatorLagged);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var timeAccumulator = new _TimeAccumulator2.default(update, 5);
+var timeAccumulator = new _TimeAccumulator2.default(update, 30);
 
 //elapsedをつかった減算方式
-//const timeAccumulator = new TimeAccumulator(update, 5);
+//const timeAccumulator = new TimeAccumulatorLagged(update, 30);
 
 requestAnimationFrame(tick);
 

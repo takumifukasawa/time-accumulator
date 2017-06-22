@@ -19,13 +19,12 @@ export default class TimeAccumulator {
 
     const currentTime = time;
     const elapsedTime = currentTime - this._prevTime;
-    this._prevTime = time;
     this._lag += elapsedTime;
 
     let count = 0;
     while(count < this._chaseCount && this._lag > this._rate) {
       this._lag -= this._rate;
-      this._func(this._prevTime += this._rate * count, this._rate);
+      this._func(this._prevTime += this._rate, this._rate);
       count++;
     }
   }

@@ -2,10 +2,10 @@
 import TimeAccumulator from './TimeAccumulator';
 import TimeAccumulatorLagged from './TimeAccumulatorLagged';
 
-const timeAccumulator = new TimeAccumulator(update, 5);
+const timeAccumulator = new TimeAccumulator(update, 30);
 
 //elapsedをつかった減算方式
-//const timeAccumulator = new TimeAccumulator(update, 5);
+//const timeAccumulator = new TimeAccumulatorLagged(update, 30);
 
 requestAnimationFrame(tick);
 
